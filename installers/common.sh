@@ -1,5 +1,3 @@
-
-
 #create hostname account with root privelages.
 function create_user () {
 
@@ -49,18 +47,18 @@ function display_welcome() {
 
     echo -e "${cyan}\n"
     echo -e "  _____ ____   _____ "
-  	echo -e " / ____|  _ \ / ____| "
- 		echo -e "| (___ | |_) | | "
-  	echo -e " \___ \|  _ <| | "
-		echo -e " ____) | |_) | |____ "
-		echo -e "|_____/|____/ \_____| "
+    echo -e " / ____|  _ \ / ____| "
+    echo -e "| (___ | |_) | | "
+    echo -e " \___ \|  _ <| | "
+    echo -e " ____) | |_) | |____ "
+    echo -e "|_____/|____/ \_____| "
     echo -e "${raspberry}\n"
-		echo -e "            _                            _ _ "
-		echo -e "           (_)                          (_) | "
-		echo -e "  _ __ ___  _  ___ _ __ ___     _____  ___| |_ "
-		echo -e " | '_  '_ \| |/ __| '__/ _ \   / _ \ \/ / | __| "
-		echo -e " | | | | | | | (__| | | (_) | |  __/>  <| | |_ "
-		echo -e " |_| |_| |_|_|\___|_|  \___/   \___/_/\_\_|\__| "
+    echo -e "            _                            _ _ "
+    echo -e "           (_)                          (_) | "
+    echo -e "  _ __ ___  _  ___ _ __ ___     _____  ___| |_ "
+    echo -e " | '_  '_ \| |/ __| '__/ _ \   / _ \ \/ / | __| "
+    echo -e " | | | | | | | (__| | | (_) | |  __/>  <| | |_ "
+    echo -e " |_| |_| |_|_|\___|_|  \___/   \___/_/\_\_|\__| "
     echo -e "${cyan}by Minotaurware.net "
     echo -e "${green}\n"
     echo -e "Exit setup tool for SBCs."
@@ -145,10 +143,9 @@ function configure_exit() {
 		sudo sysctl -p /etc/sysctl.conf
 		sudo systemctl restart lokinet
 
-
 		#clean out installer files
 		sudo rm -r $exit_dir/installers || install_error "Unable to remove installers"
-    sudo rm -r /tmp/exit || install_error "Unable to remove /tmp/exit folder"
+		sudo rm -r /tmp/exit || install_error "Unable to remove /tmp/exit folder"
 
 		#provide option to launch and display lokinet address
 
@@ -176,7 +173,7 @@ function install_Exit() {
     display_welcome
     update_system_packages
     install_dependencies
-		stop_lokinet
+    stop_lokinet
     create_user
     # create_exit_directory
     # download_latest_files
