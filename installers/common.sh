@@ -145,8 +145,7 @@ function configure_exit() {
 		sed -i 's#\#ifaddr=#ifaddr=172.16.0.1/16#g' /var/lib/lokinet/lokinet.ini
 		sed -i 's#\#paths=6#paths=8#g' /var/lib/lokinet/lokinet.ini
 		sed -i 's#\#net.ipv4.ip_forward=1#net.ipv4.ip_forward = 1#g' /etc/sysctl.conf
-		if grep -Fxq "172.16.0.1" /etc/iptables/rules.v4
-		then
+		if grep "172.16.0.1" /etc/iptables/rules.v4 > /dev/null; then
 		    echo -n "iptables entry already exists"
 					else
 				iptables -t nat -A POSTROUTING -s 172.16.0.1/16 -o eth0 -j MASQUERADE
