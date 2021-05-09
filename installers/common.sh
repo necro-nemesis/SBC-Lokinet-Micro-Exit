@@ -25,12 +25,12 @@
 
 # Outputs a Exit Install log line
 function install_log() {
-    echo -e "\033[1;32mexit Install: $*\033[m"
+    echo -e "\033[1;32mExit Install: $*\033[m"
 }
 
 # Outputs a Exit Install Error log line and exits with status code 1
 function install_error() {
-    echo -e "\033[1;37;41mexit Install Error: $*\033[m"
+    echo -e "\033[1;37;41mExit Install Error: $*\033[m"
     exit 1
 }
 
@@ -164,7 +164,6 @@ function configure_exit() {
 		IP="127.3.2.1"
 		exit_address=$(host -t cname localhost.loki $IP | awk '/alias for/ { print $6 }')
 		install_warning "Your Lokinet Address is:\nhttp://${exit_address}"
-		install_warning "Place your exit in ${exit_dir}"
     echo -n "Do you wish to immediately go live with the exit? [y/N]: "
     read answer
     if [[ $answer != "y" ]]; then
