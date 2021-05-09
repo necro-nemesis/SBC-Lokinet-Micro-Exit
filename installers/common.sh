@@ -46,12 +46,17 @@ function display_welcome() {
     cyan='\033[1;36m'
 
     echo -e "${cyan}\n"
-    echo -e "  _____ ____   _____ "
-    echo -e " / ____|  _ \ / ____| "
-    echo -e "| (___ | |_) | | "
-    echo -e " \___ \|  _ <| | "
-    echo -e " ____) | |_) | |____ "
-    echo -e "|_____/|____/ \_____| "
+    echo -e "              _____ ____   _____ "
+    echo -e "             / ____|  _ \ / ____| "
+    echo -e "            | (___ | |_) | | "
+    echo -e "             \___ \|  _ <| | "
+    echo -e "             ____) | |_) | |____ "
+    echo -e "            |_____/|____/ \_____| "
+		echo -e "${green}         __          __   _            __ "
+		echo -e "        / /   ____  / /__(_)___  ___  / /_"
+		echo -e "       / /   / __ \/ //_/ / __ \/ _ \/ __/ "
+		echo -e "      / /___/ /_/ / ,< / / / / /  __/ /_"
+		echo -e "     /_____/\____/_/|_/_/_/ /_/\___/\__/ "
     echo -e "${raspberry}            _                            _ _ "
 #    echo -e "            _                            _ _ "
     echo -e "           (_)                          (_) | "
@@ -145,14 +150,17 @@ function configure_exit() {
 		sed -i 's#\#ifaddr=#ifaddr=172.16.0.1/16#g' /var/lib/lokinet/lokinet.ini
 		sed -i 's#\#paths=6#paths=8#g' /var/lib/lokinet/lokinet.ini
 		sed -i 's#\#net.ipv4.ip_forward=1#net.ipv4.ip_forward = 1#g' /etc/sysctl.conf
-		if grep 172.16.0.1 /etc/iptables/rules.v4 > /dev/null; then
-		    echo -n "iptables entry already exists"
-					else
-				iptables -t nat -A POSTROUTING -s 172.16.0.1/16 -o eth0 -j MASQUERADE
-				iptables-save > /etc/iptables/rules.v4
-		fi
-#		iptables -t nat -A POSTROUTING -s 172.16.0.1/16 -o eth0 -j MASQUERADE
+		#append /etc/iptables/rules.v4
+		iptables -t nat -A POSTROUTING -s 172.16.0.1/16 -o eth0 -j MASQUERADE
+		iptables-save > /etc/iptables/rules.v4
+		#apply ipv4 forwarding if not already set
 		sudo sysctl -p /etc/sysctl.conf
+		#apply resolvconf settings
+		echo "nameserver=127.3.2.1" | sudo tee /etc/resolvconf/resolv.conf.d/head
+		sudo rm /etc/resolv.conf
+		sudo ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf
+		sudo resolvconf -u || install_error "Unable to update resolv.conf"
+		#restart lokinet accepting changes
 		sudo systemctl restart lokinet
 
 		#clean out installer files
