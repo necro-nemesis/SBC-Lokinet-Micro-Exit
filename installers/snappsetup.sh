@@ -1,4 +1,4 @@
-UPDATE_URL="https://raw.githubusercontent.com/necro-nemesis/Daedalus-SNAppCrafter/master/"
+UPDATE_URL="https://raw.githubusercontent.com/necro-nemesis/SBC-Lokinet-Micro-Exit/master/"
 wget -q ${UPDATE_URL}/installers/common.sh -O /tmp/exitcommon.sh
 source /tmp/exitcommon.sh && rm -f /tmp/exitcommon.sh
 
@@ -14,7 +14,7 @@ function install_dependencies() {
     curl -s https://deb.imaginary.stream/public.gpg | sudo apt-key add -
     echo "deb https://deb.imaginary.stream $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/imaginary.stream.list
     sudo apt-get update
-    sudo yes | apt-get install git screen dnsutils python3 resolvconf lokinet || install_error "Unable to install dependencies"
+    sudo yes | apt-get install git screen dnsutils python3 resolvconf lokinet iptables-persistent|| install_error "Unable to install dependencies"
 }
 
 install_Exit
