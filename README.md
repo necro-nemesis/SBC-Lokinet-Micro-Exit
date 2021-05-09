@@ -2,7 +2,7 @@ SBC Lokinet Micro Exit
 
 ![](https://i.imgur.com/o1fLzMl.png)
 
-# `SBC Lokinet Micro Exit` [![Release 1.0](https://img.shields.io/badge/Release-1.1-green.svg)](https://github.com/necro-nemesis/raspap-webgui/releases)
+# `SBC Lokinet Micro Exit` [![Release 1.0](https://img.shields.io/badge/Release-1.0-green.svg)](https://github.com/necro-nemesis/raspap-webgui/releases)
 
 SBC Lokinet Micro Exit is an easy to use Lokinet Exit set up tool to rapidly configure an Exit on a Debian based Single Board Computer (SBC) utilizing .deb packages. The installer can configure an exit for Lokinet on an SBC running Debian, Raspberry OS or Armbian. This allows anyone to host their own exit using Lokinet network. After installing a fresh image, running the script and following the installers instructions the device will launch your exit providing you with your individual exit address.
 
