@@ -68,7 +68,6 @@ Install SBC Lokinet Micro Exit from shell prompt:
 ```sh
 $ wget -q https://git.io/J3dYg -O /tmp/microexit && bash /tmp/microexit
 ```
-The installer will update, locate, install and configure all the prerequisites for you. You will be prompted to create a new user account.
 
 At the end of the install process you will be presented with your Lokinet address. Either by starting the exit by answer "Y" or exiting the script "N" it will allow you to highlight the address and copy/paste this to clipboard or plug it directly into your Lokinet client to test your exit.
 

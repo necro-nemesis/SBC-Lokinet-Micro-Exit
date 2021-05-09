@@ -1,27 +1,27 @@
 #create hostname account with root privelages.
-function create_user () {
-
-install_log "Create Exit user account"
-
-if [ $(id -u) -eq 0 ]; then
-	read -p "Enter username : " username
-	read -s -p "Enter password : " password
-	egrep "^$username" /etc/passwd >/dev/null
-	if [ $? -eq 0 ]; then
-		echo "$username exists!"
-		exit 1
-	else
-		pass=$(perl -e 'print crypt($ARGV[0], "password")' $password)
-		useradd -m -p $pass $username
-    sudo adduser $username sudo
-		[ $? -eq 0 ] && echo "User has been added to system!" || echo "Failed to add a user!"
-	fi
-else
-	echo "Only root may add a user to the system"
-	exit 2
-fi
-
-}
+# function create_user () {
+#
+# install_log "Create Exit user account"
+#
+# if [ $(id -u) -eq 0 ]; then
+# 	read -p "Enter username : " username
+# 	read -s -p "Enter password : " password
+# 	egrep "^$username" /etc/passwd >/dev/null
+# 	if [ $? -eq 0 ]; then
+# 		echo "$username exists!"
+# 		exit 1
+# 	else
+# 		pass=$(perl -e 'print crypt($ARGV[0], "password")' $password)
+# 		useradd -m -p $pass $username
+#     sudo adduser $username sudo
+# 		[ $? -eq 0 ] && echo "User has been added to system!" || echo "Failed to add a user!"
+# 	fi
+# else
+# 	echo "Only root may add a user to the system"
+# 	exit 2
+# fi
+#
+# }
 
 # Outputs a Exit Install log line
 function install_log() {
@@ -52,8 +52,8 @@ function display_welcome() {
     echo -e " \___ \|  _ <| | "
     echo -e " ____) | |_) | |____ "
     echo -e "|_____/|____/ \_____| "
-    echo -e "${raspberry}\n"
-    echo -e "            _                            _ _ "
+    echo -e "${raspberry}            _                            _ _ "
+#    echo -e "            _                            _ _ "
     echo -e "           (_)                          (_) | "
     echo -e "  _ __ ___  _  ___ _ __ ___     _____  ___| |_ "
     echo -e " | '_  '_ \| |/ __| '__/ _ \   / _ \ \/ / | __| "
@@ -63,6 +63,13 @@ function display_welcome() {
     echo -e "${green}\n"
     echo -e "Exit setup tool for SBCs."
     echo -e "The Quick Installer will guide you through a few easy steps\n\n"
+		echo -n "Continue with Lokinet Exit Installation? [y/N]: "
+    read answer
+    if [[ $answer != "y" ]]; then
+        echo "Installation aborted."
+        exit 0
+    fi
+
 }
 
 ### NOTE: all the below functions are overloadable for system-specific installs
@@ -144,8 +151,8 @@ function configure_exit() {
 		sudo systemctl restart lokinet
 
 		#clean out installer files
-		sudo rm -r $exit_dir/installers || install_error "Unable to remove installers"
-		sudo rm -r /tmp/exit || install_error "Unable to remove /tmp/exit folder"
+		# sudo rm -r $exit_dir/installers || install_error "Unable to remove installers"
+		sudo rm -r /tmp/microexit || install_error "Unable to remove /tmp/microexit folder"
 
 		#provide option to launch and display lokinet address
 
@@ -158,10 +165,10 @@ function configure_exit() {
 		exit_address=$(host -t cname localhost.loki $IP | awk '/alias for/ { print $6 }')
 		install_warning "Your Lokinet Address is:\nhttp://${exit_address}"
 		install_warning "Place your exit in ${exit_dir}"
-    echo -n "Do you wish to go live with exit? [y/N]: "
+    echo -n "Do you wish to immediately go live with the exit? [y/N]: "
     read answer
     if [[ $answer != "y" ]]; then
-        echo "Exit not launched. Exiting installation"
+        echo "Exit not launched. Will launch on next reboot. Exiting installation"
         exit 0
     fi
     install_log "Exit Launching"
@@ -174,7 +181,7 @@ function install_Exit() {
     update_system_packages
     install_dependencies
     stop_lokinet
-    create_user
+    # create_user
     # create_exit_directory
     # download_latest_files
     # change_file_ownership
