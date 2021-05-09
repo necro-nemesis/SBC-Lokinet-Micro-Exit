@@ -1,6 +1,6 @@
 SBC Lokinet Micro Exit
 
-![](https://i.imgur.com/o1fLzMl.png)
+![](https://i.imgur.com/H6cZ0TD.png)
 
 # `SBC Lokinet Micro Exit` [![Release 1.0](https://img.shields.io/badge/Release-1.0-green.svg)](https://github.com/necro-nemesis/raspap-webgui/releases)
 
