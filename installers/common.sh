@@ -1,28 +1,3 @@
-#create hostname account with root privelages.
-# function create_user () {
-#
-# install_log "Create Exit user account"
-#
-# if [ $(id -u) -eq 0 ]; then
-# 	read -p "Enter username : " username
-# 	read -s -p "Enter password : " password
-# 	egrep "^$username" /etc/passwd >/dev/null
-# 	if [ $? -eq 0 ]; then
-# 		echo "$username exists!"
-# 		exit 1
-# 	else
-# 		pass=$(perl -e 'print crypt($ARGV[0], "password")' $password)
-# 		useradd -m -p $pass $username
-#     sudo adduser $username sudo
-# 		[ $? -eq 0 ] && echo "User has been added to system!" || echo "Failed to add a user!"
-# 	fi
-# else
-# 	echo "Only root may add a user to the system"
-# 	exit 2
-# fi
-#
-# }
-
 # Outputs a Exit Install log line
 function install_log() {
     echo -e "\033[1;32mExit Install: $*\033[m"
@@ -96,51 +71,9 @@ function stop_lokinet(){
     sudo systemctl stop lokinet.service
 }
 
-# # Verifies existence and permissions of exit directory
-# function create_exit_directory() {
-#     install_log "Creating exit files directory"
-#     exit_dir="/home/$username/exit"
-#
-#     if [ -d "$exit_dir" ]; then
-#         sudo mv $exit_dir "$exit_dir.`date +%F-%R`" || install_error "Unable to move old '$exit_dir' out of the way"
-#     fi
-#     sudo mkdir -p "$exit_dir" || install_error "Unable to create directory '$exit_dir'"
-#     sudo chown -R $username:$username "$exit_dir" || install_error "Unable to change file ownership for '$exit_dir'"
-# }
-#
-# # Fetches latest files from github for basic exit
-# function download_latest_files() {
-#     if [ -d "$exit_dir" ]; then
-#         sudo mv $exit_dir "$exit_dir.`date +%F-%R`" || install_error "Unable to remove old snap directory"
-#     fi
-#
-#     install_log "Cloning latest files from github"
-#     git clone --depth 1 https://github.com/necro-nemesis/SBC-Lokinet-Micro-Exit $exit_dir || install_error "Unable to download files from github"
-#
-# #handle changes to resolvconf giving nameserver 127.3.2.1 priority.
-# 		sudo systemctl stop resolvconf
-# 		sudo mv $exit_dir/head /etc/resolvconf/resolv.conf.d/head || install_error "Unable to move resolvconf head file"
-# 		sudo rm /etc/resolv.conf
-# 		sudo ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf
-# 		sudo resolvconf -u || install_error "Unable to update resolv.conf"
-# 		sudo systemctl start resolvconf
-# }
-#
-# # Sets files ownership in exit directory
-# function change_file_ownership() {
-#     if [ ! -d "$exit_dir" ]; then
-#         install_error "exit directory doesn't exist"
-#     fi
-#
-#     install_log "Changing file ownership in exit directory"
-#     sudo chown -R $username:$username "$exit_dir" || install_error "Unable to change file ownership for 'exit_dir'"
-# 		sudo chmod -R 0755 "$exit_dir" || install_error "Unable to change permissions for 'exit_dir'"
-# 		sudo mv $exit_dir/exit /usr/local/bin
-# }
-
 function configure_exit() {
 
-		#append /var/lib/lokinet/lokinet.ini
+		#edit /var/lib/lokinet/lokinet.ini to exit settings
 		sed -i 's#\#keyfile=#keyfile=/var/lib/lokinet/exit.private#g' /var/lib/lokinet/lokinet.ini
 		sed -i 's#\#min-connections=4#min-connections=8#g' /var/lib/lokinet/lokinet.ini
 		sed -i 's#\#max-connections=6#max-connections=16#g' /var/lib/lokinet/lokinet.ini
@@ -148,24 +81,25 @@ function configure_exit() {
 		sed -i 's#\#reachable=1#reachable=1#g' /var/lib/lokinet/lokinet.ini
 		sed -i 's#\#ifaddr=#ifaddr=172.16.0.1/16#g' /var/lib/lokinet/lokinet.ini
 		sed -i 's#\#paths=6#paths=8#g' /var/lib/lokinet/lokinet.ini
-		sed -i 's#\#net.ipv4.ip_forward=1#net.ipv4.ip_forward = 1#g' /etc/sysctl.conf
+
 		#append /etc/iptables/rules.v4
 		iptables -t nat -A POSTROUTING -s 172.16.0.1/16 -o eth0 -j MASQUERADE
 		iptables-save > /etc/iptables/rules.v4
+
 		#apply ipv4 forwarding if not already set
+		sed -i 's#\#net.ipv4.ip_forward=1#net.ipv4.ip_forward = 1#g' /etc/sysctl.conf
 		sudo sysctl -p /etc/sysctl.conf
+
 		#apply resolvconf settings
 		echo "nameserver=127.3.2.1" | sudo tee /etc/resolvconf/resolv.conf.d/head
 		sudo rm /etc/resolv.conf
 		sudo ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf
 		sudo resolvconf -u || install_error "Unable to update resolv.conf"
-		#restart lokinet accepting changes
-		sudo systemctl restart lokinet
 
 		#clean out installer files
 		sudo rm -r /tmp/microexit || install_error "Unable to remove /tmp/microexit folder"
 
-		#provide option to launch and display lokinet address
+		#provide option to launch and display lokinet exit address
 
     cyan='\033[1;36m'
     echo -e "${cyan}\n"
@@ -191,9 +125,5 @@ function install_Exit() {
     update_system_packages
     install_dependencies
     stop_lokinet
-    # create_user
-    # create_exit_directory
-    # download_latest_files
-    # change_file_ownership
     configure_exit
 }
