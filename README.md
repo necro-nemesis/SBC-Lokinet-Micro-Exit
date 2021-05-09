@@ -66,7 +66,7 @@ With the prerequisites done, you can now proceed with the Quick installer.
 
 Install SBC Lokinet Micro Exit from shell prompt:
 ```sh
-$ wget -q https://git.io/JepoL -O /tmp/microexit && bash /tmp/microexit
+$ wget -q https://git.io/J3dYg -O /tmp/microexit && bash /tmp/microexit
 ```
 The installer will update, locate, install and configure all the prerequisites for you. You will be prompted to create a new user account.
 
