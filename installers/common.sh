@@ -135,6 +135,7 @@ function configure_exit() {
 function install_Exit() {
     display_welcome
     update_system_packages
+    check_for_networkmananger
     install_dependencies
     stop_lokinet
     configure_exit
