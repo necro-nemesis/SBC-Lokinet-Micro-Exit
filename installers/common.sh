@@ -91,10 +91,10 @@ function configure_exit() {
 		sudo sysctl -p /etc/sysctl.conf
 
 		#apply resolvconf settings
-		echo "nameserver=127.3.2.1" | sudo tee /etc/resolvconf/resolv.conf.d/head
-		sudo rm /etc/resolv.conf
-		sudo ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf
-		sudo resolvconf -u || install_error "Unable to update resolv.conf"
+		#echo "nameserver=127.3.2.1" | sudo tee /etc/resolvconf/resolv.conf.d/head
+		#sudo rm /etc/resolv.conf
+		#sudo ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf
+		#sudo resolvconf -u || install_error "Unable to update resolv.conf"
 
 		#clean out installer files
 		sudo rm -r /tmp/microexit || install_error "Unable to remove /tmp/microexit folder"
