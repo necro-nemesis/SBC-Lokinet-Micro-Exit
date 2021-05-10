@@ -98,8 +98,9 @@ function configure_exit() {
 		iptables -t nat -A POSTROUTING -s 172.16.0.1/16 -o eth0 -j MASQUERADE
 		iptables-save > /etc/iptables/rules.v4
 
-		#apply ipv4 forwarding if not already set
-		sed -i 's#\#net.ipv4.ip_forward=1#net.ipv4.ip_forward = 1#g' /etc/sysctl.conf
+		#apply ipv4/6 forwarding if not already set
+		sed -i 's#\#net.ipv6.conf.all.forwarding=1#net.ipv6.conf.all.forwarding=1#g' /etc/sysctl.conf
+		sed -i 's#\#net.ipv4.ip_forward = 1#net.ipv4.ip_forward = 1#g' /etc/sysctl.conf
 		sudo sysctl -p /etc/sysctl.conf
 
 		#apply resolvconf settings
