@@ -13,10 +13,8 @@ function install_dependencies() {
     echo "Install public key used to sign the lokinet binaries."
     curl -s https://deb.imaginary.stream/public.gpg | sudo apt-key add -
     echo "deb https://deb.imaginary.stream $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/imaginary.stream.list
-    sudo debconf-set-selections <<EOF
-    iptables-persistent iptables-persistent/autosave_v4 boolean true
-    iptables-persistent iptables-persistent/autosave_v6 boolean true
-    EOF
+    echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections
+    echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections
     sudo apt-get update
     sudo yes | apt-get install git screen dnsutils python3 resolvconf lokinet iptables-persistent|| install_error "Unable to install dependencies"
 }
