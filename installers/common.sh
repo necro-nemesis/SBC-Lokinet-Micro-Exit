@@ -106,9 +106,6 @@ function configure_exit() {
     echo -e " Thank you for using SBC Lokinet Micro Exit  "
     echo -e " by Minotaurware.net  "
 		install_log "SBC Lokinet Micro Exit setup has completed your installation"
-		IP="127.3.2.1"
-		exit_address=$(host -t cname localhost.loki $IP | awk '/alias for/ { print $6 }')
-		install_warning "Your Lokinet Address is:\nhttp://${exit_address}"
     echo -n "Do you wish to immediately go live with the exit? [y/N]: "
     read answer
     if [[ $answer != "y" ]]; then
@@ -117,6 +114,9 @@ function configure_exit() {
     fi
     install_log "Exit Launching"
 		sudo systemctl restart lokinet
+		IP="127.3.2.1"
+		exit_address=$(host -t cname localhost.loki $IP | awk '/alias for/ { print $6 }')
+		install_warning "Your Lokinet Exit Address is:\nhttp://${exit_address}"	
 		exit 0 || install_error "Unable to exit"
 }
 
