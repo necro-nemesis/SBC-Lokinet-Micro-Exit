@@ -60,6 +60,18 @@ function update_system_packages() {
     install_error "No function definition for update_system_packages"
 }
 
+# Replaces NetworkManger with DHCPCD (Armbian install)
+function check_for_networkmananger() {
+  install_log "Checking for NetworkManager"
+  echo "Checking for Network Manager"
+    if [ -f /lib/systemd/system/network-manager.service ]; then
+  echo "Network Manager found. Replacing with DHCPCD"
+        sudo apt-get -y purge network-manager
+        sudo apt-get -y install dhcpcd5
+    fi
+
+}
+
 # Installs additional dependencies using system package manager
 function install_dependencies() {
     # OVERLOAD THIS
